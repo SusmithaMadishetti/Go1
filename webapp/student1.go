@@ -18,7 +18,7 @@ type student struct {
 func welcomeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("welcome to page") // console reply
 	w.Header().Set("Content-Type","text/html")
-	template,err:=parseTemplat
+	
 }
 func main() {
 	r := mux.NewRouter()
