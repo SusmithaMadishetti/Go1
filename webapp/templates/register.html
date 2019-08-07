@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+
+	<title>Student Management with Golang</title>
+
+	<!--  -->
+
+	<style>
+
+	</style>
+
+</head>
+
+<body>
+   <nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Student Management with Golang</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="home">Home</a></li>
+            </ul>
+        </div>
+    </div>
+    </nav>
+
+	<div class="container">
+<div class="row">
+    <div class="col-md-4 col-sm-4 col-xs-4">
+       <div class="panel panel-default">
+            <div class="panel-heading">Form Student</div>
+            <div class="panel-body">
+                <form method="POST" action="/save" accept-charset="UTF-8" class="test-form">
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input required="required" class="form-control" placeholder="Name" name="name" type="text" id="Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input required="required" class="form-control" placeholder="Email" name="email" type="text" id="email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <input class="btn btn-primary" type="submit" value="Insert Student">
+                    </div>
+
+                    {{msg}}
+                </form>
+            </div>
+        </div>
+    </div>
+    
+     
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="muted credit">Student Management with Golang </p>
+    </div>
+</footer>    
+   
+</body>
+
+</html>
