@@ -2,8 +2,10 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	_ "fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/smtp"
 	"text/template"
@@ -13,15 +15,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+//Student datatype
 type Student struct {
 	ID, Number  int
 	Name, Email string
 }
 
+//BasicResponse structure
 type BasicResponse struct {
-	Status_code   int
-	Msg           string
-	Response_data []Student
+	Statuscode int
+	Msg        string
+	Response   []Student
 }
 
 var templates = template.Must(template.ParseFiles("templates/register.html", "templates/login.html", "templates/welcome.html", "templates/error.html"))
@@ -46,27 +50,39 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	emailid := r.FormValue("email")
 	password := r.FormValue("password")
+	fmt.Println(emailid)
+	fmt.Println(password)
 	db, err := sql.Open("mysql", "root:Alb@ny1995@tcp(localhost:3306)/demodb")
 	if err != nil {
 		panic(err.Error())
 	}
 	defer db.Close()
-	result, err := db.Query("select * from student where email= '" + emailid + "' ")
-	var name, email, password_hash string
+	result, err := db.Query("SELECT * FROM student WHERE email='susmithamadishetti54@gmail.com'")
+	fmt.Println(result)
+	var name, email, passwordhash string
 	for result.Next() {
-		result.Scan(&name, &email, &password_hash)
+		result.Scan(&name, &email, &passwordhash)
+		fmt.Println(name)
+		fmt.Println(email)
+		fmt.Println(passwordhash)
+		//fmt.Println(password)
 	}
-	answer := CheckPasswordHash(password, password_hash)
+
+	answer := CheckPasswordHash(password, passwordhash)
+	fmt.Println(answer)
 	if answer == true {
 		w.Header().Set("Content-Type", "text/html")
 		renderTemplate(w, "welcome", &BasicResponse{})
 	}
-	w.Header().Set("Content-Type", "text/html")
-	renderTemplate(w, "error", &BasicResponse{})
-
+	if answer == false {
+		w.Header().Set("Content-Type", "text/html")
+		renderTemplate(w, "error", &BasicResponse{})
+	}
 }
-func CheckPasswordHash(password, password_hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(password_hash), []byte(password))
+
+//CheckPasswordHash checking password with database
+func CheckPasswordHash(password, passwordhash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(passwordhash), []byte(password))
 	return err == nil
 }
 
@@ -82,9 +98,9 @@ func registerUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	password := name + "test"
-	password_hash, _ := HashPassword(password)
-	stmtIns, err := db.Query("INSERT INTO student (name, email, password_hash) VALUES ('" + name + "','" + email + "','" + password_hash + "')")
+	password := name + string(rand.Intn(1000))
+	passwordhash, _ := HashPassword(password)
+	stmtIns, err := db.Query("INSERT INTO student (name, email, passwordhash) VALUES ('" + name + "','" + email + "','" + passwordhash + "')")
 
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
@@ -93,14 +109,14 @@ func registerUserHandler(w http.ResponseWriter, r *http.Request) {
 	//p := &Pagedata{Datasql: resultsRow, Userdata: results}
 	send(password, email)
 
-	response_data := &BasicResponse{Status_code: 1, Msg: "registered successfully!!Please check your mail for credentials."}
+	responsedata := &BasicResponse{Statuscode: 1, Msg: "registered successfully!!Please check your mail for credentials."}
 	// TODO   generate password, insert it into DB, send an email.
 	w.Header().Set("Content-Type", "text/html")
-	renderTemplate(w, "login", response_data)
+	renderTemplate(w, "login", responsedata)
 	//fmt.Println(results)
 }
 
-// Utils
+// HashPassword Utils
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
