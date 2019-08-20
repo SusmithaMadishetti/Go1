@@ -28,7 +28,7 @@ type BasicResponse struct {
 	Response   []Student
 }
 
-var templates = template.Must(template.ParseFiles("templates/register.html", "templates/login.html", "templates/welcome.html", "templates/error.html"))
+var templates = template.Must(template.ParseGlob("templates/*.html"))
 
 func renderTemplate(w http.ResponseWriter, tmpl string, br *BasicResponse) {
 	// p.Datasql = template.HTML()
@@ -57,22 +57,25 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 	defer db.Close()
-	result, err := db.Query("SELECT * FROM student WHERE email='susmithamadishetti54@gmail.com'")
+	result, err := db.Query("SELECT * FROM student WHERE email='" + emailid + "'")
 	fmt.Println(result)
 	var name, email, passwordhash string
+	var id int
 	for result.Next() {
-		result.Scan(&name, &email, &passwordhash)
+		result.Scan(&id, &name, &email, &passwordhash)
 		fmt.Println(name)
 		fmt.Println(email)
 		fmt.Println(passwordhash)
 		//fmt.Println(password)
 	}
+	fmt.Println(password)
+	fmt.Println(passwordhash)
 
 	answer := CheckPasswordHash(password, passwordhash)
 	fmt.Println(answer)
 	if answer == true {
 		w.Header().Set("Content-Type", "text/html")
-		renderTemplate(w, "welcome", &BasicResponse{})
+		renderTemplate(w, "view", &BasicResponse{})
 	}
 	if answer == false {
 		w.Header().Set("Content-Type", "text/html")
