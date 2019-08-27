@@ -1,0 +1,17 @@
+syntax="proto3";
+
+package addUnary;
+option go_package="addpb";
+
+message AddRequest{
+    sint32 a=1;
+    sint32 b=2;
+}
+message AddResponse{
+    sint32 res=1;
+}
+
+service AddService{
+    rpc Add(AddRequest)returns(AddResponse){};
+}
+

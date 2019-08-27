@@ -1,0 +1,1 @@
+PS C:\workspace\grpc-go\test> protoc testpb/test.proto --go_out=plugins=grpc:.
