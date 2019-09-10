@@ -1,0 +1,19 @@
+syntax="proto3";
+
+package maxBi;
+option go_package="maxpb";
+
+message maxRequest{
+    int32 number=1;
+}
+
+message maxResponse{
+    int32 result=1;
+}
+
+
+service MaxService{
+
+    rpc Max(stream maxRequest)returns(stream maxResponse){};
+
+}
