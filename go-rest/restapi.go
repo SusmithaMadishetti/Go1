@@ -24,7 +24,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Welocome to home Page..!")
 }
 
-func getAllExpanses(w http.ResponseWriter, r *http.Request) {
+func GetAllExpanses(w http.ResponseWriter, r *http.Request) {
 	// TODO get it from DB
 	json.NewEncoder(w).Encode(Expanses)
 }
@@ -82,7 +82,7 @@ func requestHandler() {
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", homePage)
-	router.HandleFunc("/expanses", getAllExpanses)
+	router.HandleFunc("/expanses", GetAllExpanses)
 	router.HandleFunc("/expanse/{id}", getSingleExapnse).Methods("GET")
 	router.HandleFunc("/expanse", createExpanse).Methods("POST")
 	router.HandleFunc("/expanse", updateExpanse).Methods("PUT")
