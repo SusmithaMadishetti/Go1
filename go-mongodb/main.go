@@ -12,14 +12,15 @@ import (
 func main() {
 	r := httprouter.New()
 	uc := controllers.NewUserController(getSession())
-	//uc := controllers.NewUserIntrestController(getSession())
-	go r.POST("/user", uc.CreateUser)
-
-	http.ListenAndServe(":8088", r)
+	r.GET("/", uc.Index)
+	r.GET("/user/:id", uc.GetUser)
+	r.POST("/user", uc.CreateUser)
+	r.DELETE("/user/:id", uc.DeleteUser)
+	http.ListenAndServe(":8080", r)
 }
 
 func getSession() *mgo.Session {
-	s, err := mgo.Dial("mongodb://localhost:27017")
+	s, err := mgo.Dial("mongodb://localhost")
 	if err != nil {
 		panic(err)
 	}
