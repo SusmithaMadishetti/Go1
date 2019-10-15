@@ -34,7 +34,7 @@ func main() {
 	//insert one
 	pid := bson.NewObjectId()
 	insertone := Product{"cookies", 15, pid}
-	fmt.Println(insertone)
+	fmt.Println("insertone", insertone)
 	insertResult, err := collection.InsertOne(context.TODO(), insertone)
 	if err != nil {
 		log.Fatal(err)
